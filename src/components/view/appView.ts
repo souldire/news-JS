@@ -3,20 +3,20 @@ import Sources from './sources/sources';
 import { ArticlesResponse, SourcesResponse } from '../../types/news-api';
 
 export class AppView {
-    news: News;
-    sources: Sources;
+    private news: News;
+    private sources: Sources;
 
     constructor() {
         this.news = new News();
         this.sources = new Sources();
     }
 
-    drawNews(data: ArticlesResponse | undefined): void {
+    public drawNews(data: Partial<ArticlesResponse> | undefined): void {
         const values = data?.articles ? data.articles : [];
         this.news.draw(values);
     }
 
-    drawSources(data: SourcesResponse | undefined): void {
+    public drawSources(data: Partial<SourcesResponse> | undefined): void {
         const values = data?.sources ? data.sources : [];
         this.sources.draw(values);
     }

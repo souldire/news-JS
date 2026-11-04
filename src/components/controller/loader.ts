@@ -1,15 +1,15 @@
 import { Callback } from '../../types/news-api';
 
 class Loader {
-    baseLink: string;
-    options: Record<string, string>;
+    private readonly baseLink: string;
+    private readonly options: Readonly<Record<string, string>>;
 
     constructor(baseLink: string, options: Record<string, string>) {
         this.baseLink = baseLink;
         this.options = options;
     }
 
-    getResp<T>(
+    public getResp<T>(
         { endpoint, options = {} }: { endpoint: string; options?: Record<string, string> },
         callback: Callback<T> = () => {
             console.error('No callback for GET response');
@@ -18,7 +18,7 @@ class Loader {
         this.load<T>('GET', endpoint, callback, options);
     }
 
-    errorHandler(res: Response): Response {
+    private errorHandler(res: Response): Response {
         if (!res.ok) {
             if (res.status === 401 || res.status === 404)
                 console.log(`Sorry, but there is ${res.status} error: ${res.statusText}`);
@@ -28,7 +28,7 @@ class Loader {
         return res;
     }
 
-    makeUrl(options: Record<string, string>, endpoint: string): string {
+    private makeUrl(options: Record<string, string>, endpoint: string): string {
         const urlOptions = { ...this.options, ...options };
         let url = `${this.baseLink}${endpoint}?`;
 
@@ -39,7 +39,12 @@ class Loader {
         return url.slice(0, -1);
     }
 
-    load<T>(method: string, endpoint: string, callback: Callback<T>, options: Record<string, string> = {}): void {
+    public load<T>(
+        method: string,
+        endpoint: string,
+        callback: Callback<T>,
+        options: Record<string, string> = {}
+    ): void {
         fetch(this.makeUrl(options, endpoint), { method })
             .then(this.errorHandler)
             .then((res) => res.json())

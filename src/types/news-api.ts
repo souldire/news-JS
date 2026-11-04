@@ -1,3 +1,8 @@
+export enum Endpoints {
+    Sources = 'sources',
+    Everything = 'everything',
+}
+
 export type Status = 'ok' | 'error';
 
 export interface Source {
